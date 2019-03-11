@@ -1,15 +1,16 @@
 import pygame
 from intro import TitleCard
+from colors import Colors
 
 
 class Button:
-    def __init__(self, screen, msg, size=26, pos=(0, 0), text_color=(255, 255, 255), alt_color=(0, 255, 0)):
+    def __init__(self, screen, msg, size=26, pos=(0, 0), text_color=Colors().white, alt_color=(0, 255, 0)):
         self.screen = screen
         self.screen_rect = screen.get_rect()
 
         self.text_color = text_color
         self.alt_color = alt_color
-        self.font = pygame.font.Font('fonts/LuckiestGuy-Regular.ttf', size)
+        self.font = pygame.font.Font('fonts/Lumberjack-Regular.ttf', size)
         self.pos = pos
 
         self.msg = msg
@@ -38,11 +39,12 @@ class Button:
 
 
 class HighScoreScreen:
-    def __init__(self, screen, score_controller, size=26, background=(0, 0, 0)):
+    def __init__(self, screen, score_controller, size=26, background=Colors().black):
         self.screen = screen
         self.score_controller = score_controller
         self.back_button = Button(screen, 'Back', pos=(int(screen.get_width() * 0.25), int(screen.get_height() * 0.9)))
-        self.font = pygame.font.Font('fonts/LuckiestGuy-Regular.ttf', size)
+
+        self.font = pygame.font.Font('fonts/Lumberjack-Regular.ttf', size)
         self.images = []
         self.active = False
         self.background = background
@@ -63,7 +65,7 @@ class HighScoreScreen:
     def prep_images(self):
         self.images.clear()
         for num, score in enumerate(self.score_controller.high_scores):
-            image = self.font.render('#' + str(num + 1) + ' :  ' + str(score), True, (255, 255, 255))
+            image = self.font.render('#' + str(num + 1) + ' :  ' + str(score), True, Colors().white)
             rect = image.get_rect()
             self.images.append([image, rect])
 
@@ -76,9 +78,8 @@ class HighScoreScreen:
 class Menu:
     def __init__(self, screen):
         self.screen = screen
-        self.title = TitleCard(screen, 'Pacman Portal', pos=(int(screen.get_width() * 0.5),
+        self.title = TitleCard(screen, 'PacmanPortal', pos=(int(screen.get_width() * 0.5),
                                                              int(screen.get_height() * 0.15)))
-
         self.play_button = Button(screen, 'Play Game', pos=(int(screen.get_width() * 0.5),
                                                             int(screen.get_height() * 0.8)))
         self.high_scores_button = Button(screen, 'High Scores', pos=(int(screen.get_width() * 0.5),
@@ -86,7 +87,7 @@ class Menu:
         self.hs_screen = False
         self.ready_to_play = False
 
-    def check_buttons(self):
+    def check(self):
         self.ready_to_play = self.play_button.check_button(*pygame.mouse.get_pos())
         self.hs_screen = self.high_scores_button.check_button(*pygame.mouse.get_pos())
 

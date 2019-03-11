@@ -1,6 +1,6 @@
 import json
 import pygame
-
+from colors import Colors
 
 
 class ScoreBoard:
@@ -8,10 +8,8 @@ class ScoreBoard:
     def __init__(self, screen, pos=(0, 0)):
         self.screen = screen
         self.score = 0
-        self.color = (250,250,250)
-        self.font = pygame.font.Font('fonts/Lumberjack-Regular.ttf',32)
-        self.image = None
-        self.rect = None
+        self.color = Colors().white
+        self.font = pygame.font.Font('fonts/Lumberjack-Regular.ttf', 32)
         self.prep_image()
         self.pos = pos
         self.position()
@@ -80,12 +78,29 @@ class ScoreController:
         self.score = 0
         self.level = 1
         self.high_scores = []
-        self.scoreboard = ScoreBoard(screen=screen, pos=sb_pos)
+        self.scoreboard = ScoreBoard(screen, sb_pos)
         self.item_counter = ItemCounter(screen=screen, pos=itc_pos, image_name=items_image)
         self.init_high_scores()
 
     def increment_level(self, up=1):
         self.level += up
+
+    def init_high_scores(self):
+        try:
+            with open('score_data.json', 'r') as file:
+                self.high_scores = json.load(file)
+                self.high_scores.sort(reverse=True)
+        except (FileNotFoundError, ValueError, EOFError, json.JSONDecodeError) as e:
+            print(e)
+            self.high_scores = [0, 0, 0, 0, 0]
+
+    def save_high_scores(self):
+        for i in range(len(self.high_scores)):
+            if self.score >= self.high_scores[i]:
+                self.high_scores[i] = self.score
+                break
+        with open('score_data.json', 'w') as file:
+            json.dump(self.high_scores, file)
 
     def reset_level(self):
         self.level = 1
@@ -99,25 +114,5 @@ class ScoreController:
             self.item_counter.add_items(items)
 
     def blit(self):
-        """Blit all score related displays to the screen"""
         self.scoreboard.blit()
         self.item_counter.blit()
-
-    def init_high_scores(self):
-        """Read saved high scores from local storage"""
-        try:
-            with open('score_data.json', 'r') as file:
-                self.high_scores = json.load(file)
-                self.high_scores.sort(reverse=True)
-        except (FileNotFoundError, ValueError, EOFError, json.JSONDecodeError) as e:
-            print(e)
-            self.high_scores = [0, 0, 0, 0, 0]
-
-    def save_high_scores(self):
-        """Save high scores to the disk"""
-        for i in range(len(self.high_scores)):
-            if self.score >= self.high_scores[i]:
-                self.high_scores[i] = self.score
-                break
-        with open('score_data.json', 'w') as file:
-            json.dump(self.high_scores, file)

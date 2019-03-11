@@ -1,10 +1,9 @@
 import pygame
-from score import ScoreBoard
-from image_manager import ImageManager
+from images import ImageManager
 
 
 class ImageRow:
-    def __init__(self, screen, img, count, label, pos=(0, 0), color=(250,250,250)):
+    def __init__(self, screen, img, count, label, pos=(0, 0), color=(250, 250, 250)):
         self.screen = screen
         if isinstance(img, str):
             self.image = pygame.image.load('images/' + img)
@@ -13,7 +12,7 @@ class ImageRow:
         self.image_count = None
         self.image_rects = None
         self.color = color
-        self.font = pygame.font.Font('fonts/LuckiestGuy-Regular.ttf', 36)
+        self.font = pygame.font.Font('fonts/Lumberjack-Regular.ttf', 36)
         self.text = label
         self.text_image = None
         self.text_image_rect = None
@@ -46,15 +45,15 @@ class ImageRow:
             self.screen.blit(self.image, rect)
 
 
-class PacManCounter:
+class Counter:
     def __init__(self, screen, initial_count=2, ct_pos=(0, 0), images_size=(32, 32)):
         self.screen = screen
         self.max_lives = initial_count
         self.lives = initial_count
         sheet_images = ImageManager('img/Pac.png', sheet=True, pos_offsets=[(0, 0, 32, 32),
-(0, 32 * 1, 32, 32),
-(0, 32 * 2, 32, 32),
-(0, 32 * 3, 32, 32)],
+                                                                            (0, 32 * 1, 32, 32),
+                                                                            (0, 32 * 2, 32, 32),
+                                                                            (0, 32 * 3, 32, 32)],
                                     resize=images_size).all_images()
         life_image = sheet_images[-1]
         self.life_display = ImageRow(screen, life_image, initial_count, 'Lives', ct_pos)

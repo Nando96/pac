@@ -1,8 +1,8 @@
-from Tiles import Tile
-from image_manager import ImageManager
+from tiles import Block
+from images import ImageManager
 
 
-class Berry(Tile):
-    def __init__(self,width, height,pos):
-        img, _ = ImageManager('img/berry.png', resize=(width // 2, height // 2)).get_image()
-        super(Berry, self).__init__(width, height, pos, img)
+class Berry(Block):
+    def __init__(self, w, h, pos):
+        img, _ = ImageManager('img/berry.png', resize=(w // 2, h // 2)).get_image()
+        super(Berry, self).__init__(w, h, pos, img)
